@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/xianleewu/zettlab-ainas-iot#readme
+    about: Installation, configuration, entities and troubleshooting.
+  - name: Discussions / questions
+    url: https://github.com/xianleewu/zettlab-ainas-iot/discussions
+    about: Ask questions and share setups here rather than opening an issue.

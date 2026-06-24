@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# HA test artifacts
+.coverage
+htmlcov/
+
+# Secrets / local dev — never commit device IPs or credentials
+.env
+secrets.yaml

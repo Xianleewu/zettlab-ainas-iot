@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "添加 Zettlab AINAS",
+        "description": "你想如何添加设备？",
+        "menu_options": {
+          "discover": "在局域网中发现",
+          "manual": "输入 IP 地址",
+          "remote_id": "使用远程访问 ID"
+        }
+      },
+      "discover": {
+        "title": "发现的设备",
+        "data": { "host": "设备" }
+      },
+      "manual": {
+        "title": "输入设备地址",
+        "data": { "host": "IP 地址或主机名" }
+      },
+      "remote_id": {
+        "title": "远程访问 ID",
+        "data": { "remote_id": "远程访问 ID" }
+      },
+      "login": {
+        "title": "登录到 {name}",
+        "data": {
+          "username": "用户名",
+          "password": "密码"
+        }
+      },
+      "reauth_confirm": {
+        "title": "重新认证",
+        "description": "Zettlab AINAS 的登录凭据已失效，请重新登录。",
+        "data": {
+          "username": "用户名",
+          "password": "密码"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "连接失败。请检查地址并确认设备在线。",
+      "invalid_auth": "用户名或密码错误。"
+    },
+    "abort": {
+      "already_configured": "该设备已配置。",
+      "remote_id_not_supported": "远程访问 ID 接入尚未支持，请使用发现或输入设备 IP 地址。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "选项",
+        "data": { "scan_interval": "轮询间隔（秒）" }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "cpu_usage": { "name": "CPU 使用率" },
+      "cpu_temperature": { "name": "CPU 温度" },
+      "memory_usage": { "name": "内存使用率" },
+      "memory_used": { "name": "已用内存" },
+      "npu_usage": { "name": "NPU 使用率" },
+      "gpu_usage": { "name": "GPU 使用率" },
+      "uptime": { "name": "上次启动" }
+    },
+    "select": {
+      "fan_mode": { "name": "风扇模式" }
+    },
+    "light": {
+      "status_led": { "name": "状态指示灯" }
+    },
+    "switch": {
+      "screen": { "name": "屏幕" }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add Zettlab AINAS",
+        "description": "How would you like to add your device?",
+        "menu_options": {
+          "discover": "Discover on the network",
+          "manual": "Enter IP address",
+          "remote_id": "Use remote-access ID"
+        }
+      },
+      "discover": {
+        "title": "Discovered devices",
+        "data": { "host": "Device" }
+      },
+      "manual": {
+        "title": "Enter device address",
+        "data": { "host": "IP address or hostname" }
+      },
+      "remote_id": {
+        "title": "Remote-access ID",
+        "data": { "remote_id": "Remote-access ID" }
+      },
+      "login": {
+        "title": "Sign in to {name}",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "Your Zettlab AINAS credentials are no longer valid. Please sign in again.",
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect. Check the address and that the device is online.",
+      "invalid_auth": "Invalid username or password."
+    },
+    "abort": {
+      "already_configured": "This device is already configured.",
+      "remote_id_not_supported": "Remote-access ID onboarding is not available yet. Please use discovery or enter the device IP address."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": { "scan_interval": "Polling interval (seconds)" }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "cpu_usage": { "name": "CPU usage" },
+      "cpu_temperature": { "name": "CPU temperature" },
+      "memory_usage": { "name": "Memory usage" },
+      "memory_used": { "name": "Memory used" },
+      "npu_usage": { "name": "NPU usage" },
+      "gpu_usage": { "name": "GPU usage" },
+      "uptime": { "name": "Last boot" }
+    },
+    "select": {
+      "fan_mode": { "name": "Fan mode" }
+    },
+    "light": {
+      "status_led": { "name": "Status LED" }
+    },
+    "switch": {
+      "screen": { "name": "Screen" }
+    }
+  }
+}

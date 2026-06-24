@@ -1,0 +1,12 @@
+{
+  "domain": "zettlab_ainas",
+  "name": "Zettlab AINAS",
+  "codeowners": ["@xianleewu"],
+  "config_flow": true,
+  "documentation": "https://github.com/xianleewu/zettlab-ainas-iot",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/xianleewu/zettlab-ainas-iot/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

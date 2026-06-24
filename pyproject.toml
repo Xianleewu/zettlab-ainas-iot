@@ -1,0 +1,26 @@
+[project]
+name = "zettlab-ainas"
+version = "0.1.0"
+description = "Home Assistant custom integration for Zettlab AINAS (ZettOS) NAS devices"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RUF", "ASYNC", "PL"]
+# RUF012: HA entities use mutable class attrs (_attr_*) by design.
+ignore = ["PLR0913", "RUF012"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may use literal expected values and assert-style patterns.
+"tests/*" = ["PLR2004", "S101"]
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+known-first-party = ["custom_components.zettlab_ainas"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
