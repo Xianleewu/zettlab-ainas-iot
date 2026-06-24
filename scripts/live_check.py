@@ -27,7 +27,7 @@ sys.path.insert(
     str(Path(__file__).resolve().parent.parent / "custom_components" / "zettlab_ainas"),
 )
 
-from api import ZettOSClient  # noqa: E402
+from api import ZettOSClient
 
 
 async def main() -> int:

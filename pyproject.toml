@@ -16,8 +16,8 @@ ignore = ["PLR0913", "RUF012"]
 [tool.ruff.lint.per-file-ignores]
 # Tests may use literal expected values and assert-style patterns.
 "tests/*" = ["PLR2004", "S101"]
-# Dev CLI helper: long print lines and post-sys.path import are intentional.
-"scripts/*" = ["E501", "I001"]
+# Dev CLI helper: long prints, post-sys.path import, and argv literals are fine.
+"scripts/*" = ["E501", "I001", "E402", "PLR2004"]
 
 [tool.ruff.lint.isort]
 force-sort-within-sections = true
