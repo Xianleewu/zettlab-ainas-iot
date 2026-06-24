@@ -38,18 +38,22 @@
 
 ## 📦 Supported devices
 
-| Model | Tested | Notes |
-|-------|:------:|-------|
-| Zettlab **D4** | ✅ | ZettOS 1.9.0-beta |
-| Zettlab **D6 Ultra** | ✅ | ZettOS 1.9.1-beta |
-| Other ZettOS models | ⚠️ | Same API — expected to work; please report success/issues |
+**Supports all Zettlab AINAS (ZettOS) models** running **ZettOS firmware 1.9.0 or
+newer**. The integration is model-agnostic — it reads the model, serial and
+firmware from the device and uses the common ZettOS API, so every model works with
+no code changes.
 
-The integration is **model-agnostic**: it reads the model, serial and firmware from
-the device, so new ZettOS models should work without code changes.
+Verified on:
+
+| Model | Firmware |
+|-------|----------|
+| Zettlab **D4** | ZettOS 1.9.0-beta |
+| Zettlab **D6 Ultra** | ZettOS 1.9.1-beta |
 
 ## ✅ Requirements
 
 - Home Assistant **2024.12** or newer.
+- A Zettlab AINAS running **ZettOS firmware 1.9.0 or newer**.
 - The NAS reachable on your local network (same LAN / routable IP).
 - Your NAS web credentials (the account you use at `https://<nas-ip>`, default username `admin`).
 

@@ -38,17 +38,21 @@
 
 ## 📦 支持的设备
 
-| 型号 | 已测试 | 说明 |
-|------|:------:|------|
-| Zettlab **D4** | ✅ | ZettOS 1.9.0-beta |
-| Zettlab **D6 Ultra** | ✅ | ZettOS 1.9.1-beta |
-| 其它 ZettOS 型号 | ⚠️ | API 相同,理论上可用,欢迎反馈 |
+**支持所有 Zettlab AINAS(ZettOS)型号**,要求 **ZettOS 固件 1.9.0 或更新**。本集成
+**与型号无关** —— 从设备读取型号、序列号和固件,使用通用的 ZettOS API,因此所有型号
+无需改代码即可工作。
 
-本集成**与型号无关**:从设备读取型号、序列号和固件版本,新的 ZettOS 型号无需改代码即可工作。
+已验证:
+
+| 型号 | 固件 |
+|------|------|
+| Zettlab **D4** | ZettOS 1.9.0-beta |
+| Zettlab **D6 Ultra** | ZettOS 1.9.1-beta |
 
 ## ✅ 前提条件
 
 - Home Assistant **2024.12** 或更新版本。
+- 一台运行 **ZettOS 固件 1.9.0 或更新** 的 Zettlab AINAS。
 - NAS 在你的局域网内可达(同一网段 / 可路由 IP)。
 - 你的 NAS 网页登录凭据(即访问 `https://<nas-ip>` 用的账号,默认用户名 `admin`)。
 
