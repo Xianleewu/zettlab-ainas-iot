@@ -62,17 +62,6 @@ async def test_discover_with_device(hass: HomeAssistant) -> None:
     assert result["data"][CONF_HOST] == "1.2.3.4"
 
 
-async def test_remote_id_not_supported(hass: HomeAssistant) -> None:
-    """The remote-ID step is scaffolded and aborts for now."""
-    result = await _menu(hass, "remote_id")
-    assert result["step_id"] == "remote_id"
-    result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], {"remote_id": "29c3"}
-    )
-    assert result["type"] is FlowResultType.ABORT
-    assert result["reason"] == "remote_id_not_supported"
-
-
 async def test_options_flow(
     hass: HomeAssistant, mock_config_entry: MockConfigEntry, mock_client: AsyncMock
 ) -> None:

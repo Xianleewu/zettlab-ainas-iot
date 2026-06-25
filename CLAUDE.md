@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project status — READ FIRST
 
 A working **v0.1.0 scaffold is implemented** under `custom_components/zettlab_ainas/`
-(as of 2026-06-24): API client, coordinator, 3-step config flow, and
+(as of 2026-06-24): API client, coordinator, local-only config flow, and
 sensor/binary_sensor/select/light/switch platforms — 17 tests passing, ~85%
 coverage, ruff-clean. This file is the **design + API contract** behind it: the
 device API was reverse-engineered from real hardware (D4 + D6 Ultra) and verified,
@@ -128,11 +128,11 @@ reusable HTTPS proxy:
   (disabled by default).
 
 Implication: full remote-ID support needs a cloud account, device binding, and
-the P2P tunnel protocol — heavy and cloud-dependent. The `async_step_remote_id`
-stays a clean placeholder; recommend users reach the NAS remotely via the normal
-HA patterns (VPN / reverse proxy / Nabu Casa) and keep this integration on the
-**local** API. Revisit only with a cloud account + bound device to capture the
-flow.
+the P2P tunnel protocol — heavy and cloud-dependent. **The config flow is
+local-only** (discover + manual IP); the cloud `remote_id` step was removed so no
+cloud-platform UI leaks into onboarding. Recommend users reach the NAS remotely
+via the normal HA patterns (VPN / reverse proxy / Nabu Casa). Revisit only with a
+cloud account + bound device to capture the flow.
 
 ## Target repository layout (HACS-compatible)
 

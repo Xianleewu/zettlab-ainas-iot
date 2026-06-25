@@ -1,10 +1,9 @@
 """Config flow for Zettlab AINAS.
 
-Onboarding flow (per product requirement):
-  1. discover  — native LAN discovery protocol
-  2. manual    — if not discovered, enter the device IP
-  3. remote_id — log in via the device's remote-access ID (cloud relay)
-All paths end at the login step (RSA-encrypted username/password).
+Local-only onboarding:
+  1. discover — native LAN discovery protocol
+  2. manual   — if not discovered, enter the device IP
+Both paths end at the login step (RSA-encrypted username/password).
 """
 
 from __future__ import annotations
@@ -25,7 +24,6 @@ from .api import ZettosAuthError, ZettOSClient, ZettosError, async_probe_device
 from .const import (
     CONF_HOST,
     CONF_PASSWORD,
-    CONF_REMOTE_ID,
     CONF_SCAN_INTERVAL,
     CONF_USERNAME,
     CONF_VERIFY_SSL,
@@ -66,7 +64,7 @@ class ZettlabAinasConfigFlow(ConfigFlow, domain=DOMAIN):
         """Let the user choose how to add the device."""
         return self.async_show_menu(
             step_id="user",
-            menu_options=["discover", "manual", "remote_id"],
+            menu_options=["discover", "manual"],
         )
 
     # --- step 1: discovery ------------------------------------------------------
@@ -117,26 +115,6 @@ class ZettlabAinasConfigFlow(ConfigFlow, domain=DOMAIN):
             step_id="manual",
             data_schema=vol.Schema({vol.Required(CONF_HOST): str}),
             errors=errors,
-        )
-
-    # --- step 3: remote ID ------------------------------------------------------
-
-    async def async_step_remote_id(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Add via the device's remote-access ID (Zettlab cloud relay).
-
-        The cloud relay protocol (iot.zettlab.com) is not yet implemented; this
-        step is scaffolded so the onboarding structure is in place. For now it
-        aborts with guidance to use discovery or manual entry.
-        """
-        if user_input is not None:
-            # TODO: resolve {remote_id} -> reachable endpoint via the cloud relay,
-            # then chain into async_step_login().
-            return self.async_abort(reason="remote_id_not_supported")
-        return self.async_show_form(
-            step_id="remote_id",
-            data_schema=vol.Schema({vol.Required(CONF_REMOTE_ID): str}),
         )
 
     # --- final: login -----------------------------------------------------------

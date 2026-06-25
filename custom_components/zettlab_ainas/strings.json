@@ -6,8 +6,7 @@
         "description": "How would you like to add your device?",
         "menu_options": {
           "discover": "Discover on the network",
-          "manual": "Enter IP address",
-          "remote_id": "Use remote-access ID"
+          "manual": "Enter IP address"
         }
       },
       "discover": {
@@ -17,10 +16,6 @@
       "manual": {
         "title": "Enter device address",
         "data": { "host": "IP address or hostname" }
-      },
-      "remote_id": {
-        "title": "Remote-access ID",
-        "data": { "remote_id": "Remote-access ID" }
       },
       "login": {
         "title": "Sign in to {name}",
@@ -43,8 +38,7 @@
       "invalid_auth": "Invalid username or password."
     },
     "abort": {
-      "already_configured": "This device is already configured.",
-      "remote_id_not_supported": "Remote-access ID onboarding is not available yet. Please use discovery or enter the device IP address."
+      "already_configured": "This device is already configured."
     }
   },
   "options": {

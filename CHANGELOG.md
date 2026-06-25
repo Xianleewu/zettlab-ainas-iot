@@ -6,6 +6,12 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Config flow is now **local-only**: removed the cloud remote-access-ID
+  onboarding step (and its strings/constants) so no cloud-platform UI appears
+  during setup. Add devices via discovery or manual IP.
+
 ## [0.1.0] - 2026-06-24
 
 Initial release.

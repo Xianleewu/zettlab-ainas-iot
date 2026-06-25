@@ -83,7 +83,6 @@ will be guided through three ways to add the device:
 
 1. **Discover on the network** — find devices automatically.
 2. **Enter IP address** — if discovery doesn't find it, type the NAS IP.
-3. **Use remote-access ID** — *placeholder, see [limitations](#-known-limitations--roadmap)*.
 
 Then sign in with your NAS web username and password. Credentials are stored
 encrypted in the config entry and never leave your Home Assistant instance.
@@ -111,10 +110,10 @@ Full table with units and notes: **[docs/entities.md](docs/entities.md)**.
 
 ## ⚠️ Known limitations & roadmap
 
-- **Remote access (remote ID)** — onboarding step is scaffolded only. Zettlab
-  remote access uses a cloud account + P2P tunnel and exposes no reusable local
-  API, so reach your NAS remotely with the usual HA options (VPN / reverse proxy
-  / Home Assistant Cloud). Tracked for a future release.
+- **Remote access** — this integration is **local-only**. Zettlab remote access
+  relies on a cloud account + P2P tunnel with no reusable local API, so reach your
+  NAS remotely with the usual HA options (VPN / reverse proxy / Home Assistant
+  Cloud).
 - **Screen brightness** — the device exposes on/off but no brightness setter via
   the API; only the on/off `switch` is provided.
 - **Fan-mode labels** — the mode values are integers (the human labels aren't yet

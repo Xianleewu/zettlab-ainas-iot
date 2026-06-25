@@ -10,7 +10,9 @@ offered three ways to add the device:
 1. **Discover on the network** — automatically finds Zettlab devices on your LAN.
 2. **Enter IP address** — if discovery finds nothing, type the NAS IP (e.g.
    `192.168.1.50`). The address is validated against the device before continuing.
-3. **Use remote-access ID** — placeholder; see the README's *Known limitations*.
+
+The integration is local-only; for remote access use VPN / reverse proxy / Home
+Assistant Cloud.
 
 Then **sign in** with your NAS web username and password (the same account you use
 at `https://<nas-ip>`, default username `admin`).
