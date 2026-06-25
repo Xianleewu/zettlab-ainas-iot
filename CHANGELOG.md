@@ -6,6 +6,8 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-06-25
+
 ### Changed
 
 - Config flow is now **local-only**: removed the cloud remote-access-ID
@@ -40,5 +42,6 @@ Initial release.
 - No screen-brightness control (device exposes on/off only via the API).
 - Fan-mode options are shown as raw integers (labels not yet decoded).
 
-[Unreleased]: https://github.com/xianleewu/zettlab-ainas-iot/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/xianleewu/zettlab-ainas-iot/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/xianleewu/zettlab-ainas-iot/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/xianleewu/zettlab-ainas-iot/releases/tag/v0.1.0
