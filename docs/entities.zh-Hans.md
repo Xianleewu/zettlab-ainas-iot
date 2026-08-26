@@ -13,17 +13,28 @@
 | CPU 温度 | °C | temperature | 开 | `monitor/v1/view` → `cpu.thermal` |
 | 内存使用率 | % | — | 开 | `monitor/v1/view` → `mem.used / mem.total` |
 | 已用内存 | GiB | data size | 开 | `monitor/v1/view` → `mem.used` |
+| 空闲内存 | GiB | data size | 开 | `monitor/v1/view` → `mem.free` |
+| 缓存内存 | GiB | data size | 开 | `monitor/v1/view` → `mem.cache` |
+| 总内存 | GiB | data size | 开 | `monitor/v1/view` → `mem.total` |
 | NPU 使用率 | % | — | **关** | `monitor/v1/view` → `npu[]`(取平均) |
 | GPU 使用率 | % | — | **关** | `monitor/v1/view` → `gpu[]` |
+| 风扇 _N_ 转速 | rpm | — | 开 | `monitor/v1/view` → `fan_speed[]` |
+| 磁盘 _N_ 读/写速率 | B/s | data rate | 开 | `disks[].read_bytes/write_bytes` 的轮询差值 |
+| 网口 _N_ 上传/下载速率 | B/s | data rate | 开 | `nets[].bytes_sent/bytes_recv` 的轮询差值 |
 | 上次启动 | 时间戳 | timestamp | 开(诊断) | `device` → `last_start_time` |
 | 存储池 _N_ 使用率 | % | — | 开 | `storage-pool` → `used_size / total_size` |
 | 存储池 _N_ 已用 | GiB | data size | 开 | `storage-pool` → `used_size` |
+| 存储池 _N_ 空闲 | GiB | data size | 开 | `storage-pool` → `total_size - used_size` |
 | 存储池 _N_ 容量 | GiB | data size | 开 | `storage-pool` → `total_size` |
 | 磁盘 _序列号_ 温度 | °C | temperature | 开 | `storage-pool` → `disks[].temperature` |
 
 磁盘温度传感器附带额外属性:`model`、`slot`、`type`、`path`。
 
 NPU 与 GPU 传感器**默认关闭**(常年为 0);需要的话在实体页面手动启用。
+
+风扇、磁盘 I/O 与网口实体按设备实际返回的数组/映射动态创建，因此无需针对双风扇或
+三风扇型号单独配置。速率传感器在首次轮询时为 `unknown`（需要两个计数器样本），之后
+显示当前每秒字节数。
 
 ## 二元传感器 (binary_sensor)
 
@@ -41,6 +52,6 @@ NPU 与 GPU 传感器**默认关闭**(常年为 0);需要的话在实体页面�
 
 ## 说明
 
-- 动态实体(存储池、磁盘)在初始化时根据设备状态创建。之后新增磁盘或存储池,需
-  **重新加载**集成才能识别。
+- 动态实体（风扇、存储池、磁盘和网口）在初始化时根据设备状态创建。之后硬件发生
+  变化时，需**重新加载**集成才能识别。
 - 没有亮度控制:设备只暴露屏幕开/关。

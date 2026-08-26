@@ -15,7 +15,9 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import (
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     EntityCategory,
+    UnitOfDataRate,
     UnitOfInformation,
     UnitOfTemperature,
 )
@@ -94,6 +96,36 @@ SENSORS: tuple[ZettlabSensorDescription, ...] = (
         value_fn=lambda d: _num(d.monitor.get("mem", {}).get("used")),
     ),
     ZettlabSensorDescription(
+        key="memory_free",
+        translation_key="memory_free",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        native_unit_of_measurement=UnitOfInformation.BYTES,
+        suggested_unit_of_measurement=UnitOfInformation.GIBIBYTES,
+        suggested_display_precision=2,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _num(d.monitor.get("mem", {}).get("free")),
+    ),
+    ZettlabSensorDescription(
+        key="memory_cache",
+        translation_key="memory_cache",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        native_unit_of_measurement=UnitOfInformation.BYTES,
+        suggested_unit_of_measurement=UnitOfInformation.GIBIBYTES,
+        suggested_display_precision=2,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _num(d.monitor.get("mem", {}).get("cache")),
+    ),
+    ZettlabSensorDescription(
+        key="memory_total",
+        translation_key="memory_total",
+        device_class=SensorDeviceClass.DATA_SIZE,
+        native_unit_of_measurement=UnitOfInformation.BYTES,
+        suggested_unit_of_measurement=UnitOfInformation.GIBIBYTES,
+        suggested_display_precision=2,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=lambda d: _num(d.monitor.get("mem", {}).get("total")),
+    ),
+    ZettlabSensorDescription(
         key="npu_usage",
         translation_key="npu_usage",
         native_unit_of_measurement=PERCENTAGE,
@@ -141,12 +173,37 @@ async def async_setup_entry(
     entities: list[SensorEntity] = [
         ZettlabSensor(coordinator, desc) for desc in SENSORS
     ]
+    fan_speeds = data.monitor.get("fan_speed")
+    if isinstance(fan_speeds, list):
+        entities.extend(
+            ZettlabFanSpeedSensor(coordinator, index)
+            for index in range(len(fan_speeds))
+        )
+    disks = data.monitor.get("disks")
+    if isinstance(disks, dict):
+        for name in disks:
+            entities.append(
+                ZettlabTransferRateSensor(coordinator, "disk", name, "read")
+            )
+            entities.append(
+                ZettlabTransferRateSensor(coordinator, "disk", name, "write")
+            )
+    networks = data.monitor.get("nets")
+    if isinstance(networks, dict):
+        for name in networks:
+            entities.append(
+                ZettlabTransferRateSensor(coordinator, "network", name, "upload")
+            )
+            entities.append(
+                ZettlabTransferRateSensor(coordinator, "network", name, "download")
+            )
     for pool in data.pools:
         name = pool.get("name")
         if not name:
             continue
         entities.append(ZettlabPoolSensor(coordinator, name, "usage"))
         entities.append(ZettlabPoolSensor(coordinator, name, "used"))
+        entities.append(ZettlabPoolSensor(coordinator, name, "free"))
         entities.append(ZettlabPoolSensor(coordinator, name, "total"))
         for disk in pool.get("disks", []):
             serial = disk.get("serial_number")
@@ -172,8 +229,58 @@ class ZettlabSensor(ZettlabAinasEntity, SensorEntity):
         return self.entity_description.value_fn(self.coordinator.data)
 
 
+class ZettlabFanSpeedSensor(ZettlabAinasEntity, SensorEntity):
+    """Rotational speed of one fan reported by the realtime monitor."""
+
+    _attr_native_unit_of_measurement = REVOLUTIONS_PER_MINUTE
+    _attr_state_class = SensorStateClass.MEASUREMENT
+
+    def __init__(self, coordinator, index: int) -> None:
+        """Initialise a dynamically indexed fan sensor."""
+        super().__init__(coordinator, f"fan_{index + 1}_speed")
+        self._index = index
+        self._attr_translation_key = "fan_speed"
+        self._attr_translation_placeholders = {"number": str(index + 1)}
+
+    @property
+    def native_value(self) -> StateType:
+        """Return RPM for this fan, or unknown when it is not reported."""
+        speeds = self.coordinator.data.monitor.get("fan_speed")
+        if not isinstance(speeds, list) or self._index >= len(speeds):
+            return None
+        return _num(speeds[self._index])
+
+
+class ZettlabTransferRateSensor(ZettlabAinasEntity, SensorEntity):
+    """Current disk or network byte rate derived from counter deltas."""
+
+    _attr_device_class = SensorDeviceClass.DATA_RATE
+    _attr_native_unit_of_measurement = UnitOfDataRate.BYTES_PER_SECOND
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_suggested_display_precision = 1
+
+    def __init__(self, coordinator, source: str, name: str, direction: str) -> None:
+        """Initialise a transfer-rate sensor."""
+        super().__init__(coordinator, f"{source}_{name}_{direction}_rate")
+        self._source = source
+        self._source_name = name
+        self._direction = direction
+        self._attr_translation_key = f"{source}_{direction}_rate"
+        self._attr_translation_placeholders = {"name": name}
+
+    @property
+    def native_value(self) -> StateType:
+        """Return the rate calculated by the coordinator."""
+        rates = (
+            self.coordinator.data.disk_rates
+            if self._source == "disk"
+            else self.coordinator.data.network_rates
+        )
+        return _num(rates.get(self._source_name, {}).get(self._direction))
+
+
 class ZettlabPoolSensor(ZettlabAinasEntity, SensorEntity):
-    """A per-storage-pool sensor (usage / used / total)."""
+    """A per-storage-pool sensor (usage / used / free / total)."""
 
     _CONFIG: dict[str, dict[str, Any]] = {
         "usage": {
@@ -184,6 +291,11 @@ class ZettlabPoolSensor(ZettlabAinasEntity, SensorEntity):
         },
         "used": {
             "name": "used",
+            "unit": UnitOfInformation.BYTES,
+            "device_class": SensorDeviceClass.DATA_SIZE,
+        },
+        "free": {
+            "name": "free",
             "unit": UnitOfInformation.BYTES,
             "device_class": SensorDeviceClass.DATA_SIZE,
         },
@@ -204,7 +316,7 @@ class ZettlabPoolSensor(ZettlabAinasEntity, SensorEntity):
         self._attr_native_unit_of_measurement = cfg["unit"]
         self._attr_state_class = SensorStateClass.MEASUREMENT
         self._attr_device_class = cfg["device_class"]
-        if metric in ("used", "total"):
+        if metric in ("used", "free", "total"):
             self._attr_suggested_unit_of_measurement = UnitOfInformation.GIBIBYTES
             self._attr_suggested_display_precision = 2
 
@@ -222,6 +334,14 @@ class ZettlabPoolSensor(ZettlabAinasEntity, SensorEntity):
             return _num(pool.get("used_size"))
         if self._metric == "total":
             return _num(pool.get("total_size"))
+        if self._metric == "free":
+            total = pool.get("total_size")
+            used = pool.get("used_size")
+            if not isinstance(total, (int, float)) or not isinstance(
+                used, (int, float)
+            ):
+                return None
+            return max(total - used, 0)
         return _div(pool.get("used_size"), pool.get("total_size"))
 
 

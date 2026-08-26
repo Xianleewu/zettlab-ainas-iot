@@ -6,6 +6,14 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Dynamic RPM sensors for every fan returned by the ZettOS realtime monitor
+  (two- and three-fan models are supported without model-specific code).
+- Memory free, cache and total sensors, plus per-pool free capacity.
+- Per-disk read/write and per-interface upload/download rate sensors, calculated
+  from consecutive cumulative-counter samples.
+
 ## [0.1.1] - 2026-06-25
 
 ### Changed

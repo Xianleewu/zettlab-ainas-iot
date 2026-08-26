@@ -48,8 +48,23 @@ MONITOR = {
     "cpu": {"usage_rate": 12.5, "thermal": 43},
     "npu": [0, 0, 0],
     "gpu": [0],
-    "mem": {"total": 16719732736, "free": 5660459008, "used": 1753964544},
-    "disks": {},
+    "mem": {
+        "total": 16719732736,
+        "free": 5660459008,
+        "used": 1753964544,
+        "cache": 9305313280,
+    },
+    "disks": {
+        "DISK A": {
+            "read_bytes": 1000,
+            "write_bytes": 2000,
+            "read_rate": 10,
+            "write_rate": 20,
+        }
+    },
+    "nets": {"LAN1": {"bytes_sent": 10000, "bytes_recv": 20000}},
+    "fan_speed": [1066, 1070],
+    "current_time": 1000,
 }
 
 

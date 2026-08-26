@@ -71,7 +71,7 @@ async def main() -> int:
             print(
                 f"  disk : slot{disk.get('slot')} {disk.get('model')} {disk.get('temperature')}C"
             )
-    print(f"fan    : mode={fan}")
+    print(f"fan    : mode={fan} speeds={monitor.get('fan_speed', [])} rpm")
     print(f"lcd    : {lcd}")
     print(f"light  : mode={light.get('mode')} color={light.get('start_color')}")
     print("OK")

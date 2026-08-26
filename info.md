@@ -1,8 +1,8 @@
 # Zettlab AINAS
 
 Monitor and control your **Zettlab AI-NAS (ZettOS)** from Home Assistant over the
-local network — storage pools, disk health & temperature, CPU/NPU/GPU, memory,
-fan mode, the RGB status LED and the screen.
+local network — storage pools, disk health, temperature and I/O, CPU/NPU/GPU,
+memory, network throughput, fan RPM and mode, the RGB status LED and the screen.
 
 Tested on **Zettlab D4** and **D6 Ultra**; works with other ZettOS models.
 

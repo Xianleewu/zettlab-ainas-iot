@@ -33,9 +33,9 @@ services (`zettos-system-settings`, `zettos-local-storage`, `zettos-monitor`,
 authenticated HTTP API — never SSH or sysfs.
 
 Hardware exposed (D4): RK3588 8-core + Mali-G610 + 6-TOPS NPU, 16 GB RAM; 7
-thermal zones; **2 PWM fans** (RPM + duty); **backlight** 0–255 (LCD); **RGB
-status LED**; disks → `mdadm` RAID → `bcache` → `btrfs` pools at `/zettos/pool/N`;
-optional UPS (NUT, `_nut._tcp:3493`).
+thermal zones; **2 PWM fans** (x86 models report up to 3 RPM values);
+**backlight** 0–255 (LCD); **RGB status LED**; disks → `mdadm` RAID → `bcache`
+→ `btrfs` pools at `/zettos/pool/N`; optional UPS (NUT, `_nut._tcp:3493`).
 
 ## ZettOS HTTP API contract (verified)
 
@@ -60,7 +60,7 @@ Entity-relevant endpoints (all `GET` unless noted; prefix `/zettos/main`):
 | `…/system-settings/v1/device/beScan` *(no auth)* | `model_name, device_name, sn, remote_access_id, ip_address2, system_version, is_init` — used for **discovery** |
 | `…/system-settings/v1/storage-pool` | `[{name,status,total_size,used_size,type(raid…),total_devices_number,progress,disks:[{model,serial_number,slot,size,type,status,temperature,is_support_smart,real_path}],hot_spare_disks,ssd_cache_*}]` — **pool + per-disk in one call** |
 | `…/system-settings/v1/storage-pool/user_pools` | `[{pool_name,quota}]` |
-| `/zettos/monitor/v1/view` *(note: NOT under `/main`)* | realtime: `cpu:{usage_rate,thermal}`, `npu:[…]`, `gpu:[…]`, `mem:{total,free,used,cache,…}`, `disks:{"DISK A":{read_rate,write_rate,read_bytes,write_bytes},…}` |
+| `/zettos/monitor/v1/view` *(note: NOT under `/main`)* | realtime: `cpu:{usage_rate,thermal}`, `npu:[…]`, `gpu:[…]`, optional `gpu_detail`, `mem:{total,free,used,cache,…}`, `fan_speed:[…]`, `disks:{"DISK A":{read_rate,write_rate,read_bytes,write_bytes},…}`, `nets:{"LAN1":{bytes_sent,bytes_recv},…}`, `current_time` |
 | `…/system-settings/v1/fan` | GET → `data` = fan-mode int (e.g. `2`). **Set:** `POST …/v1/fan/{mode}` (mode in the URL path, no body) |
 | `…/system-settings/v1/lcd` | GET → `{status:1}` (screen on/off). **Set:** `POST …/v1/lcd` `{enable:<bool>}` — **on/off only; no brightness setter exists in the web API** |
 | `…/system-settings/v1/light` | GET → `{mode,last_mode,start_color:"#RRGGBB",end_color:"#RRGGBB",speed}`. **Set:** `POST …/v1/light` with that same object — **RGB LED** |
@@ -80,11 +80,12 @@ Fan-mode integer enum is not yet decoded (current value `2`); screen **brightnes
 
 ## Proposed HA entity model (← map each to the API above)
 
-- **sensor:** CPU usage-% + temperature, NPU/GPU usage, memory used/free/%
-  (← `monitor/v1/view`); per-disk read/write throughput (← `monitor/v1/view`);
-  per-pool total/used/free/usage-%; per-disk temperature (×N) + status; pool RAID
-  status + rebuild progress; device uptime (`last_start_time`); UPS load/charge
-  (if present); `system_version` (diagnostic).
+- **sensor:** CPU usage-% + temperature, NPU/GPU usage, memory total/used/free/
+  cache/% and per-fan RPM (← `monitor/v1/view`); per-disk read/write and per-NIC
+  upload/download throughput derived from byte-counter deltas; per-pool total/
+  used/free/usage-%; per-disk temperature (×N); device uptime
+  (`last_start_time`). Pool rebuild progress, UPS load/charge and
+  `system_version` diagnostic sensors remain proposed.
 - **binary_sensor:** pool healthy; disk healthy / SMART-ok; UPS online; device
   reachable.
 - **select:** `fan_mode` ← `POST …/v1/fan/{mode}` (decode the int enum first).

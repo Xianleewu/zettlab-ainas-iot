@@ -25,9 +25,9 @@
 
 ## ✨ Features
 
-- 📊 **System monitoring** — CPU usage & temperature, NPU/GPU usage, memory usage and used bytes.
-- 💾 **Storage** — per-pool capacity / used / usage %, RAID problem state, and per-disk temperature.
-- 🌬️ **Fan control** — read and switch the fan mode.
+- 📊 **System monitoring** — CPU usage & temperature, NPU/GPU usage, memory usage / used / free / cache / total, and per-interface network throughput.
+- 💾 **Storage** — per-pool capacity / used / free / usage %, RAID problem state, plus per-disk temperature and read/write throughput.
+- 🌬️ **Fans** — monitor every fan's RPM and switch the fan mode.
 - 💡 **RGB status LED** — full color control as a Home Assistant light.
 - 🖥️ **Screen** — turn the device LCD on/off.
 - 🔐 **Local & private** — talks only to the NAS over your LAN (RSA-encrypted login, no cloud).
@@ -98,8 +98,9 @@ A single device is created with, among others:
 
 | Platform | Entity | Source |
 |----------|--------|--------|
-| `sensor` | CPU usage / temperature, NPU·GPU usage, Memory usage / used | realtime monitor |
-| `sensor` | Pool capacity / used / usage %, Disk temperature (per disk) | storage pool |
+| `sensor` | CPU temperature/usage, NPU·GPU usage, memory metrics, fan RPM | realtime monitor |
+| `sensor` | Per-interface upload/download throughput | realtime monitor |
+| `sensor` | Pool capacity/used/free/usage %, disk temperature and I/O | storage + realtime monitor |
 | `sensor` | Last boot (diagnostic) | device info |
 | `binary_sensor` | Pool problem | storage pool |
 | `select` | Fan mode | fan |

@@ -217,7 +217,7 @@ class ZettOSClient:
         return data if isinstance(data, list) else []
 
     async def async_get_monitor(self) -> dict[str, Any]:
-        """Realtime cpu/npu/gpu/mem and per-disk I/O rates."""
+        """Realtime compute, memory, fan, disk-I/O and network counters."""
         return self._data(await self._async_request("GET", _P_MONITOR)) or {}
 
     async def async_get_fan_mode(self) -> int | None:
